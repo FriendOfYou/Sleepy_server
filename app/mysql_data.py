@@ -12,7 +12,7 @@ def select_all(data_list):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -36,7 +36,7 @@ def validate_insert(email, captcha, available):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -63,7 +63,7 @@ def search_code(email, code):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -100,7 +100,7 @@ def insert_user(name, email, password):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -123,7 +123,7 @@ def search_user(email, password):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -153,7 +153,7 @@ def search_movieDetail(movie_id):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -181,7 +181,7 @@ def judge_like(movie_id):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -209,7 +209,7 @@ def search_movieList(genres, countries, years):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -265,7 +265,7 @@ def get_movieCountries():
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -292,7 +292,7 @@ def get_movieGenres():
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -320,7 +320,7 @@ def search_moviePersons(movie_id):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
@@ -349,7 +349,7 @@ def search_personDetail(person_id):
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
