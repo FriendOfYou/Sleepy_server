@@ -12,9 +12,6 @@ def login():
     password = json.dumps(request.form['password'])
     email = email[1:-1]
     password = password[1:-1]
-    print(email)
-    print(password)
-    print("分割")
     uid = search_user(email, password)
     if uid != 0:
         # app.config['SECRET_KEY'] = os.urandom(24)

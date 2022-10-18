@@ -65,6 +65,7 @@ def search_code(email, code):
         cursor.execute(sql)
         if cursor is not None:
             row = cursor.fetchone()
+            print("row=%s" % row)
             if row is not None:
                 time_get = str(row[0])
                 time_get = re.split(' |-|:', time_get)
@@ -122,7 +123,6 @@ def search_user(email, password):
                 return row
     except Exception as e:
         print(e)
-        print('注册信息登记失败')
     cursor.close()
     conn.close()
     return 0

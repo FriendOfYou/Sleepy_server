@@ -11,7 +11,6 @@ from app.mysql_data import validate_insert
 
 @app.route('/user/code', methods=['POST', 'GET'])
 def send_email():
-    # email = request.form['email']
     email = json.dumps(request.form['email'])
     # 发信方的信息：发信邮箱，QQ 邮箱授权码
     from_addr = '275947878@qq.com'
@@ -41,10 +40,10 @@ def send_email():
         # 发送邮件
         smtpobj.sendmail(from_addr, to_addr, msg.as_string())
         print("邮件发送成功")
+        to_addr = to_addr[1:-1]
         validate_insert(to_addr, random_str, 0)
         return Response(json.dumps({'status': 0, 'msg': "发送成功"}), content_type='application/json')
 
     except smtplib.SMTPException:
         print("无法发送邮件")
         return Response(json.dumps({'status': 1, 'msg': "发送失败"}), content_type='application/json')
-
