@@ -13,7 +13,8 @@ def register():
     email = json.dumps(request.form['email'])
     code = json.dumps(request.form['code'])
     password = json.dumps(request.form['password'])
-    if search_code(email, code):
+    is_value = search_code(email, code)
+    if is_value == 0:
         print(1)
         insert_user(name, email, password)
         return Response(json.dumps({'status': 0, 'user': {'uid': uid, 'name': name, 'email': email}, 'msg': "注册成功"}),
