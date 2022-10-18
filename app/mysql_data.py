@@ -92,12 +92,18 @@ def insert_user(name, email, password):
     try:
         cursor.execute(sql)
         conn.commit()
+        sql = "select uid from user where name='%s' and email='%s' and password='%s'" % (name, email, password)
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchone()
+            if row is not None:
+                return row
         print("注册信息登记成功")
     except Exception as e:
         print(e)
-        print('注册信息登记失败')
     cursor.close()
     conn.close()
+    return -1
 
 
 # 登录用户查询
