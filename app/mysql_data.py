@@ -11,8 +11,8 @@ def mysql_conn():
         host='127.0.0.1',
         port=3306,
         user='root',
-        password='password',
-        # password='Sleepy1234567890',
+        # password='password',
+        password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
     )
