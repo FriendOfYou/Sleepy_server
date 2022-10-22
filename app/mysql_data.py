@@ -11,7 +11,7 @@ def mysql_conn():
         host='127.0.0.1',
         port=3306,
         user='root',
-        #password='password',
+        # password='password',
         password='Sleepy1234567890',
         db='sleepy',
         charset='utf8'
@@ -132,7 +132,7 @@ def search_user(email, password):
 def search_movieDetail(movie_id):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie where movie_id='%s'" % movie_id
+    sql = "select * from movie where movie_id=%d" % movie_id
     try:
         cursor.execute(sql)
         if cursor is not None:
@@ -149,11 +149,28 @@ def search_movieDetail(movie_id):
     return 0
 
 
-# 登录用户判断是否喜欢该电影
-def judge_like(movie_id):
+# 登录用户设置对电影的喜欢/不喜欢
+def set_Movielike(movie_id, uid, like_choice):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie_like where movie_id='%s'" % movie_id
+    sql = "insert into movie_like(uid,movie_id,like) values(%d,%d,%d)" % (uid, movie_id, like_choice)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return 1
+    except Exception as e:
+        print(e)
+        print('失败')
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 登录用户判断是否喜欢该电影
+def judge_Movielike(movie_id, uid):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from movie_like where movie_id=%d and uid=%d" % (movie_id, uid)
     try:
         cursor.execute(sql)
         if cursor is not None:
@@ -263,22 +280,23 @@ def get_movieGenres():
 # 根据电影id查询影人列表
 def search_moviePersons(movie_id):
     conn = mysql_conn()
-    # cursor = conn.cursor()
-    # sql = "select * from movie where id='%s'" % movie_id
-    # try:
-    #     cursor.execute(sql)
-    #     if cursor is not None:
-    #         row = cursor.fetchone()
-    #         if row is not None:
-    #             cursor.close()
-    #             conn.close()
-    #             return row
-    # except Exception as e:
-    #     print(e)
-    #     print('没有这部电影')
-    # cursor.close()
-    # conn.close()
-    # return 0
+    cursor = conn.cursor()
+    sql = "select relationship.role, relationship.person_id, person.person_name, person.sex, person.birthday, " \
+          "person.birthplace, person.person_summary, person.person_img from relationship,person where " \
+          "relationship.movie_id=%d and relationship.person_id=person.person_id" % movie_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
 
 
 # person
