@@ -318,3 +318,39 @@ def search_personDetail(person_id):
     cursor.close()
     conn.close()
     return 0
+
+
+# 登录用户设置对影人的喜欢/不喜欢
+def set_Personlike(person_id, uid, like_choice):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "insert into person_like(uid,person_id,like) values(%d,%d,%d)" % (uid, person_id, like_choice)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return 1
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 登录用户判断是否喜欢该电影
+def judge_Personlike(person_id, uid):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from person_like where person_id=%d and uid=%d" % (person_id, uid)
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchone()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
