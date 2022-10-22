@@ -89,7 +89,7 @@ def search_code(email, code):
 def insert_user(name, email, password):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "insert into user(name,email,password) values(%s,'%s','%s')" % (name, email, password)
+    sql = "insert into user(name,email,password) values('%s','%s','%s')" % (name, email, password)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -99,7 +99,6 @@ def insert_user(name, email, password):
             row = cursor.fetchone()
             if row is not None:
                 return row
-        print("注册信息登记成功")
     except Exception as e:
         print(e)
     cursor.close()

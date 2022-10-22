@@ -22,7 +22,7 @@ def register():
         uid = insert_user(name, email, password)
         print(uid)
         return Response(json.dumps({'status': 0,
-                                    'user': {'uid': uid, 'name': name, 'email': email},
+                                    'user': {'uid': uid[0], 'name': name, 'email': email},
                                     'msg': "注册成功"}), content_type='application/json')
     else:
         return Response(json.dumps({'status': 1, 'user': None, 'msg': "注册失败"}), content_type='application/json')
