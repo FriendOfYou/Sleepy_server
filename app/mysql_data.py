@@ -19,23 +19,6 @@ def mysql_conn():
 
 
 # user
-# 检索所有，施工中，需完善
-def select_all(data_list):
-    conn = mysql_conn()
-    cursor = conn.cursor()
-    sql = "select *from %s" % data_list
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    for row in results:
-        uid = row[0]
-        name = row[1]
-        email = row[2]
-        password = row[3]
-        print("uid=%s,name=%s,email=%s,password=%s" % (uid, name, email, password))
-    cursor.close()
-    conn.close()
-
-
 # 注册新用户，向register_validate中存入数据
 def validate_insert(email, captcha, available):
     conn = mysql_conn()
@@ -149,6 +132,46 @@ def search_movieDetail(movie_id):
     return 0
 
 
+# 获取所属体裁的信息
+def get_Genre(movie_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from movie_genres where movie_id=%d" % movie_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 获取所属国家/地区信息
+def get_Country(movie_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from movie_countries where movie_id=%d" % movie_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
 # 登录用户设置对电影的喜欢/不喜欢
 def set_Movielike(movie_id, uid, like_choice):
     conn = mysql_conn()
@@ -188,41 +211,41 @@ def judge_Movielike(movie_id, uid):
 
 # 未完成
 # 返回约束条件下的电影列
-def search_movieList(genres, countries, years):
+def search_movieList(genres, countries, syear, eyear, sortby):
     conn = mysql_conn()
     cursor = conn.cursor()
     try:
-        if genres != [] and countries != [] and years != []:
-            sql = "select * from movie"
-            # sql = "select *from movie where year in (%s)" % ','.join(['%s'] * len(years))
-            cursor.execute(sql)
-        elif genres != [] and countries != []:
-            sql = "select * from movie"
-            # sql = "select *from movie where year in (%s)" % ','.join(['%s'] * len(years))
-            cursor.execute(sql)
-        elif genres != [] and years != []:
-            sql = "select * from movie"
-            # sql = "select *from movie where year in (%s)" % ','.join(['%s'] * len(years))
-            cursor.execute(sql)
-        elif countries != [] and years != []:
-            sql = "select * from movie"
-            # sql = "select *from movie where year in (%s)" % ','.join(['%s'] * len(years))
-            cursor.execute(sql)
-        elif genres:
-            sql = "select * from movie"
-            # sql = "select *from movie where year in (%s)" % ','.join(['%s'] * len(years))
-            cursor.execute(sql)
-        elif countries:
-            sql = "select * from movie"
-            # sql = "select *from movie where year in (%s)" % ','.join(['%s'] * len(years))
-            cursor.execute(sql)
-        elif years:
-            sql = "select *from movie where year in (%s)" % ','.join(['%s'] * len(years))
-            cursor.execute(sql, years)
-        else:
-            sql = "select * from movie"
-            cursor.execute(sql)
+        sql = "select distinct movie.movie_id,movie.movie_name,movie.year,movie.rating,movie.movie_img,movie.tags," \
+              "movie.movie_summary,movie.genre,movie.country from movie "
+        if genres:
+            sql = sql + ",movie_genres "
+        if countries:
+            sql = sql + ",movie_countries "
+        if genres != [] or countries != [] or syear is not None or eyear is not None:
+            sql = sql + "where "
+            if genres is not None:
+                sql = sql + "movie.movie_id=movie_genres.movie_id AND"
+                for i in range(len(genres)):
+                    sql = sql + "movie_genres.genre_name='%s' OR " % genres[i]
+                sql = sql[:-3]
+                sql = sql + "AND "
+            if countries is not None:
+                sql = sql + "movie.movie_id=movie_countries.movie_id AND"
+                for i in range(len(countries)):
+                    sql = sql + "movie_countries.country_name='%s' OR " % countries[i]
+                sql = sql[:-3]
+                sql = sql + "AND "
+            if syear is not None or eyear is not None:
+                sql = sql + "movie.year>=%d AND movie.year <=%d" % (syear, eyear)
+                sql = sql + "AND "
 
+        if sortby is not None:
+            if 'yearinc' in sortby:
+                sql = sql + "ORDER NY rating ASC"
+            elif 'yeardec' in sortby:
+                sql = sql + "ORDER NY rating DESC"
+
+        cursor.execute(sql)
         if cursor is not None:
             row = cursor.fetchall()
             if row is not None:
@@ -236,7 +259,7 @@ def search_movieList(genres, countries, years):
     return 0
 
 
-# 返回电影所属国家、地区id和名称
+# 返回电影所属国家/地区id和名称
 def get_movieCountries():
     conn = mysql_conn()
     cursor = conn.cursor()
@@ -276,7 +299,6 @@ def get_movieGenres():
     return 0
 
 
-# 未完成
 # 根据电影id查询影人列表
 def search_moviePersons(movie_id):
     conn = mysql_conn()
@@ -300,6 +322,26 @@ def search_moviePersons(movie_id):
 
 
 # person
+# 查询影人列表
+def search_personList():
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from person"
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
 # 根据影人id查询影人基本信息
 def search_personDetail(person_id):
     conn = mysql_conn()
