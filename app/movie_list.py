@@ -18,7 +18,7 @@ def detail_person():
     genres = request.args.getlist('genre')  # 电影类型筛选，传入genre的id，一次至多3个;将其转化为int类型
     if genres:
         genres = list(map(int, request.args.getlist('genre')))
-    countries = request.args.getlist('country')  # 电影国家筛选，传入country的id，一次至多3个
+    countries = request.args.getlist('country')  # 电影国家筛选，传入country的id
     if countries:
         countries = list(map(int, request.args.getlist('country')))
     syear = request.args.getlist('syear')  # 电影筛选开始年份
