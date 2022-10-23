@@ -84,7 +84,6 @@ import datetime
 import pymysql
 import re
 
-
 # def search_code(email, code):
 #     conn = pymysql.connect(
 #         host='127.0.0.1',
@@ -129,36 +128,36 @@ import re
 # else:
 #     print(9999)
 
-def search_user():
-    conn = pymysql.connect(
-        host='127.0.0.1',
-        port=3306,
-        user='root',
-        password='password',
-        db='sleepy',
-        charset='utf8'
-    )
-    cursor = conn.cursor()
-    sql = "select country from movie "
-    try:
-        cursor.execute(sql)
-        if cursor is not None:
-            row = cursor.fetchall()
-            if row is not None:
-                cursor.close()
-                conn.close()
-                return row
-    except Exception as e:
-        print(e)
-    cursor.close()
-    conn.close()
-    return 0
-
-
-uid = search_user()
-a = str(uid[0])
-
-print(a)
+# def search_user():
+#     conn = pymysql.connect(
+#         host='127.0.0.1',
+#         port=3306,
+#         user='root',
+#         password='password',
+#         db='sleepy',
+#         charset='utf8'
+#     )
+#     cursor = conn.cursor()
+#     sql = "select country from movie "
+#     try:
+#         cursor.execute(sql)
+#         if cursor is not None:
+#             row = cursor.fetchall()
+#             if row is not None:
+#                 cursor.close()
+#                 conn.close()
+#                 return row
+#     except Exception as e:
+#         print(e)
+#     cursor.close()
+#     conn.close()
+#     return 0
+#
+#
+# uid = search_user()
+# a = str(uid[0])
+#
+# print(a)
 # for i in range(len(uid)):
 #     print(uid[i])
 
@@ -191,3 +190,97 @@ print(a)
 #     return 0
 # a=search_movieDetail('1291543')
 # print(a[9])
+import datetime
+import pymysql
+import re
+
+pymysql.install_as_MySQLdb()
+
+
+# 连接数据库
+def mysql_conn():
+    return pymysql.connect(
+        # host='1.15.186.76',
+        host='127.0.0.1',
+        port=3306,
+        user='root',
+        # password='password',
+        password='Sleepy1234567890',
+        db='sleepy',
+        charset='utf8'
+    )
+
+
+def select_data1():
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from movie"
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            # row = cursor.fetchone()
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+def get_genreid(genre_name):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from genre where genre_name='%s'" % genre_name
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchone()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+def insert_genre(movie_id, genre_id, genre_name):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "insert into movie_genres(movie_id,genre_id,genre_name) values(%d,%d,'%s')" % (movie_id, genre_id, genre_name)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+
+
+a = select_data1()
+for i in range(len(a)):
+    k = a[i][8]  # genre单元
+    k = re.split('/', k)
+    for j in range(len(k)):
+        id_g = get_genreid(k[j])
+        insert_genre(a[i][0], id_g[0], id_g[1])
+
+# b = get_genreid(a[4][8])
+# b = a[0][8]
+# b = re.split('/', b)
+# for i in range(len(b)):
+#     print(b[i])
+# print(b[0])
+# b[0]为id，b[1]为name
+# print(b[0])
+# k = a[0][8]  # genre单元
+# k = re.split('/', k)
+# for j in range(len(k)):
+#     id_g = get_genreid(k[j])
+#     print(id_g)
