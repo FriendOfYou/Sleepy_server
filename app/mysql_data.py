@@ -217,27 +217,28 @@ def search_movieList(genres, countries, syear, eyear, sortby):
     try:
         sql = "select distinct movie.movie_id,movie.movie_name,movie.year,movie.rating,movie.movie_img,movie.tags," \
               "movie.movie_summary,movie.genre,movie.country from movie "
-        if genres!=[]:
+        if genres != []:
             sql = sql + ",movie_genres "
-        if countries!=[]:
+        if countries != []:
             sql = sql + ",movie_countries "
         if genres != [] or countries != [] or syear is not None or eyear is not None:
             sql = sql + "where "
-            if genres is not None:
-                sql = sql + "movie.movie_id=movie_genres.movie_id AND"
+            if genres is not None and genres != []:
+                sql = sql + "movie.movie_id=movie_genres.movie_id AND "
                 for i in range(len(genres)):
                     sql = sql + "movie_genres.genre_name='%s' OR " % genres[i]
                 sql = sql[:-3]
                 sql = sql + "AND "
-            if countries is not None:
+            if countries is not None and countries != []:
                 sql = sql + "movie.movie_id=movie_countries.movie_id AND"
                 for i in range(len(countries)):
                     sql = sql + "movie_countries.country_name='%s' OR " % countries[i]
                 sql = sql[:-3]
                 sql = sql + "AND "
             if syear is not None or eyear is not None:
-                sql = sql + "movie.year>=%d AND movie.year <=%d" % (syear, eyear)
+                sql = sql + "movie.year>=%d AND movie.year <=%d " % (syear, eyear)
                 sql = sql + "AND "
+            sql = sql[:-4]
 
         if sortby is not None:
             if 'rate' in sortby:
