@@ -1,5 +1,5 @@
-import json
-
+import json,json5
+import numpy as np
 from flask import request, Response, json, session
 
 from app import app
@@ -43,8 +43,9 @@ def movie_list():
                 for k in range(len(country)):
                     country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
                     countries.append(country_data)
+                data[i][5]=str(data[i][5]).replace('\'', '"')
                 movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
-                         'rating': data[i][3], 'img': data[i][4], 'tags': json.loads(data[i][5]),
+                         'rating': data[i][3], 'img': data[i][4], 'tags': data[i][5],
                          'desc': data[i][6], 'genre': genres, 'country': countries}
                 movies.append(movie)
         else:
@@ -59,6 +60,7 @@ def movie_list():
                 for k in range(len(country)):
                     country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
                     countries.append(country_data)
+                data[i][5] = str(data[i][5]).replace('\'', '"')
                 movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
                          'rating': data[i][3], 'img': data[i][4], 'tags': data[i][5],
                          'desc': data[i][6], 'genre': genres, 'country': countries}
