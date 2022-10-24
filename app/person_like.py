@@ -6,7 +6,7 @@ from app import app
 from app.mysql_data import judge_Personlike, set_Personlike
 
 
-@app.route('/person/person_id/like', methods=['POST', 'GET'])
+@app.route('/person/<person_id>/like', methods=['POST', 'GET'])
 def person_like(person_id):
     # 对用户登陆状态进行检查
     uid = session.get('uid')  # 从session读取用户uid
