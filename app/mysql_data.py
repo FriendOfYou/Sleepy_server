@@ -307,7 +307,7 @@ def search_moviePersons(movie_id):
     cursor = conn.cursor()
     sql = "select relationship.role, relationship.person_id, person.person_name, person.sex, person.birthday, " \
           "person.birthplace, person.person_summary, person.person_img from relationship,person where " \
-          "relationship.movie_id=%d and relationship.person_id=person.person_id" % movie_id
+          "relationship.movie_id='%s' and relationship.person_id=person.person_id" % movie_id
     try:
         cursor.execute(sql)
         if cursor is not None:
