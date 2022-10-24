@@ -176,7 +176,7 @@ def get_Country(movie_id):
 def set_Movielike(movie_id, uid, like_choice):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "insert into movie_like(uid,movie_id,like) values(%d,%d,%d)" % (uid, movie_id, like_choice)
+    sql = "insert into movie_like(uid,movie_id,like_choice) values(%d,%d,%d)" % (uid, movie_id, like_choice)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -246,8 +246,9 @@ def search_movieList(genres, countries, syear, eyear, sortby):
                 sql = sql + "ORDER BY movie.year ASC"
             elif 'yeardec' in sortby:
                 sql = sql + "ORDER BY movie.year DESC"
-
+        print(sql)
         cursor.execute(sql)
+
         if cursor is not None:
             row = cursor.fetchall()
             if row is not None:
@@ -368,7 +369,7 @@ def search_personDetail(person_id):
 def set_Personlike(person_id, uid, like_choice):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "insert into person_like(uid,person_id,like) values(%d,%d,%d)" % (uid, person_id, like_choice)
+    sql = "insert into person_like(uid,person_id,like_choice) values(%d,%d,%d)" % (uid, person_id, like_choice)
     try:
         cursor.execute(sql)
         conn.commit()
