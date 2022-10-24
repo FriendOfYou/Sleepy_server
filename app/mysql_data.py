@@ -209,7 +209,6 @@ def judge_Movielike(movie_id, uid):
     return 0
 
 
-# 未完成
 # 返回约束条件下的电影列
 def search_movieList(genres, countries, syear, eyear, sortby):
     conn = mysql_conn()
@@ -217,9 +216,9 @@ def search_movieList(genres, countries, syear, eyear, sortby):
     try:
         sql = "select distinct movie.movie_id,movie.movie_name,movie.year,movie.rating,movie.movie_img,movie.tags," \
               "movie.movie_summary,movie.genre,movie.country from movie "
-        if genres!= []:
+        if genres != []:
             sql = sql + ",movie_genres "
-        if countries!= []:
+        if countries != []:
             sql = sql + ",movie_countries "
         if genres != [] or countries != [] or syear is not None or eyear is not None:
             sql = sql + "where "
@@ -367,10 +366,26 @@ def search_personDetail(person_id):
 
 
 # 登录用户设置对影人的喜欢/不喜欢
-def set_Personlike(person_id, uid, like_choice):
+def update_Personlike(person_id, uid, like_choice):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "insert into person_like(uid,person_id,like_choice) values(%d,%d,%d)" % (uid, person_id, like_choice)
+    sql = "update person_like set like_choice=%s where uid=%s and person_id=%s" % (like_choice, uid, person_id)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return 1
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 设置对用户对影人的初始评价
+def set_Personlike(uid, person_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "insert into person_like(uid,person_id,like_choice) values(%s,%s,0)" % (uid, person_id)
     try:
         cursor.execute(sql)
         conn.commit()
