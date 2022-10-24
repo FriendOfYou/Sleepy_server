@@ -240,10 +240,12 @@ def search_movieList(genres, countries, syear, eyear, sortby):
                 sql = sql + "AND "
 
         if sortby is not None:
-            if 'yearinc' in sortby:
-                sql = sql + "ORDER NY rating ASC"
+            if 'rate' in sortby:
+                sql = sql + "ORDER BY movie.rating DESC"
+            elif 'yearinc' in sortby:
+                sql = sql + "ORDER BY movie.year ASC"
             elif 'yeardec' in sortby:
-                sql = sql + "ORDER NY rating DESC"
+                sql = sql + "ORDER BY movie.year DESC"
 
         cursor.execute(sql)
         if cursor is not None:
