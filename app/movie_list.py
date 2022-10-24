@@ -25,8 +25,8 @@ def detail_person():
     if syear is not None:
         syear = int(request.args.get('syear'))
     eyear = request.args.getlist('eyear')  # 电影筛选结束年份
-    if page is not None:
-        page = int(request.args.get('eyear'))
+    if eyear is not None:
+        eyear = int(request.args.get('eyear'))
 
     data = search_movieList(genres, countries, syear, eyear, sortby)
     if data != 0:
