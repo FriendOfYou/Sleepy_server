@@ -42,7 +42,7 @@ def movie_list():
                 for k in range(len(country)):
                     country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
                     countries.append(country_data)
-                data[i][5]=str(data[i][5]).replace('\'', '"')
+                # data[i][5]=str(data[i][5]).replace('\'', '"')
                 movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
                          'rating': data[i][3], 'img': data[i][4], 'tags': data[i][5],
                          'desc': data[i][6], 'genre': genres, 'country': countries}
@@ -59,7 +59,7 @@ def movie_list():
                 for k in range(len(country)):
                     country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
                     countries.append(country_data)
-                data[i][5] = str(data[i][5]).replace('\'', '"')
+                # data[i][5] = str(data[i][5]).replace('\'', '"')
                 movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
                          'rating': data[i][3], 'img': data[i][4], 'tags': data[i][5],
                          'desc': data[i][6], 'genre': genres, 'country': countries}
@@ -67,12 +67,12 @@ def movie_list():
         total = int(len(data) / size)
         if total * size != len(data):
             total = total + 1
-        return Response(json.dumps({'status': 0, 'msg': "电影列表信息获取成功",
+        return Response(json5.dumps({'status': 0, 'msg': "电影列表信息获取成功",
                                     'data': {'page': page, 'total': total, 'list': movies}}),
                         content_type='application/json')
 
     else:
-        return Response(json.dumps({'status': 1, 'msg': "电影列表信息获取失败",
+        return Response(json5.dumps({'status': 1, 'msg': "电影列表信息获取失败",
                                     'data': None}),
                         content_type='application/json')
 
