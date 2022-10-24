@@ -16,14 +16,18 @@ def person_like(person_id):
     # 查询电影标记喜欢/不喜欢
     if request.method == 'GET':
         like = judge_Personlike(person_id, uid)
-        if like[2] == 1:
-            return Response(json.dumps({'status': 0, 'msg': "该用户喜欢该影人", 'data': {'id': like[1], 'like': 1}}),
-                            content_type='application/json')
-        elif like[2] == -1:
-            return Response(json.dumps({'status': 0, 'msg': "该用户不喜欢该影人", 'data': {'id': like[1], 'like': -1}}),
-                            content_type='application/json')
+        if like != 0:
+            if like[2] == 1:
+                return Response(json.dumps({'status': 0, 'msg': "该用户喜欢该影人", 'data': {'id': like[1], 'like': 1}}),
+                                content_type='application/json')
+            elif like[2] == -1:
+                return Response(json.dumps({'status': 0, 'msg': "该用户不喜欢该影人", 'data': {'id': like[1], 'like': -1}}),
+                                content_type='application/json')
+            else:
+                return Response(json.dumps({'status': 1, 'msg': "该用户未对该影人评价", 'data': {'id': like[1], 'like': 0}}),
+                                content_type='application/json')
         else:
-            return Response(json.dumps({'status': 1, 'msg': "该用户未对该影人评价", 'data': {'id': like[1], 'like': 0}}),
+            return Response(json.dumps({'status': 1, 'msg': "该用户未对该影人评价", 'data': None}),
                             content_type='application/json')
     # 设置电影标记喜欢/不喜欢
     else:
