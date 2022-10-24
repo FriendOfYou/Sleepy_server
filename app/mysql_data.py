@@ -226,13 +226,13 @@ def search_movieList(genres, countries, syear, eyear, sortby):
             if genres is not None and genres != []:
                 sql = sql + "movie.movie_id=movie_genres.movie_id AND "
                 for i in range(len(genres)):
-                    sql = sql + "movie_genres.genre_name='%s' OR " % genres[i]
+                    sql = sql + "movie_genres.genre_id=%s OR " % genres[i]
                 sql = sql[:-3]
                 sql = sql + "AND "
             if countries is not None and countries != []:
-                sql = sql + "movie.movie_id=movie_countries.movie_id AND"
+                sql = sql + "movie.movie_id=movie_countries.movie_id AND "
                 for i in range(len(countries)):
-                    sql = sql + "movie_countries.country_name='%s' OR " % countries[i]
+                    sql = sql + "movie_countries.country_id=%s OR " % countries[i]
                 sql = sql[:-3]
                 sql = sql + "AND "
             if syear is not None or eyear is not None:
