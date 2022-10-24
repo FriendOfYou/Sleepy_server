@@ -28,9 +28,10 @@ def movie_like(movie_id):
     # 设置电影标记喜欢/不喜欢
     else:
         like_choice = request.get_data()  # 读取用户对电影的评价
-        like_choice = like_choice.decode('utf-8')  # 将读取的字节数据转化为utf-8字符
-        like_choice = int(like_choice[5:])  # 读取实际评价选项数值 1：喜欢 -1：不喜欢 0：未评价
+        # like_choice = like_choice.decode('utf-8')  # 将读取的字节数据转化为utf-8字符
+        like_choice = json.loads(like_choice)['like']  # 读取实际评价选项数值 1：喜欢 -1：不喜欢 0：未评价
         uid = int(uid)
+        movie_id = int(movie_id)
         if set_Movielike(movie_id, uid, like_choice) == 1:
             return Response(json.dumps({'status': 0, 'msg': "电影标记成功"}),
                             content_type='application/json')
