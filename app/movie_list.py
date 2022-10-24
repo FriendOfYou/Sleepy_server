@@ -1,5 +1,4 @@
 import json,json5
-import numpy as np
 from flask import request, Response, json, session
 
 from app import app
