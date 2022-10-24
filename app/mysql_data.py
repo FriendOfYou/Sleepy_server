@@ -217,9 +217,9 @@ def search_movieList(genres, countries, syear, eyear, sortby):
     try:
         sql = "select distinct movie.movie_id,movie.movie_name,movie.year,movie.rating,movie.movie_img,movie.tags," \
               "movie.movie_summary,movie.genre,movie.country from movie "
-        if genres != []:
+        if genres!= []:
             sql = sql + ",movie_genres "
-        if countries != []:
+        if countries!= []:
             sql = sql + ",movie_countries "
         if genres != [] or countries != [] or syear is not None or eyear is not None:
             sql = sql + "where "
