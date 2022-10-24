@@ -193,7 +193,7 @@ def set_Movielike(movie_id, uid, like_choice):
 def judge_Movielike(movie_id, uid):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie_like where movie_id=%d and uid=%d" % (movie_id, uid)
+    sql = "select * from movie_like where movie_id=%s and uid=%s" % (movie_id, uid)
     try:
         cursor.execute(sql)
         if cursor is not None:
@@ -384,7 +384,7 @@ def set_Personlike(person_id, uid, like_choice):
 def judge_Personlike(person_id, uid):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from person_like where person_id=%d and uid=%d" % (person_id, uid)
+    sql = "select * from person_like where person_id=%s and uid=%s" % (person_id, uid)
     try:
         cursor.execute(sql)
         if cursor is not None:
