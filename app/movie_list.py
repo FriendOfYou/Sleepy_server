@@ -7,7 +7,7 @@ from app.mysql_data import search_movieList, get_Genre, get_Country
 
 
 @app.route('/movie/list', methods=['GET'])
-def detail_person():
+def movie_list():
     page = request.args.get('page')  # 电影所在页的页码；转化为int类型
     if page is not None:
         page = int(request.args.get('page'))
