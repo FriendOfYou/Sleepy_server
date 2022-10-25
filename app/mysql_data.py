@@ -115,7 +115,7 @@ def search_user(email, password):
 def search_movieDetail(movie_id):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie where movie_id=%d" % movie_id
+    sql = "select * from movie where movie_id=%s" % movie_id
     try:
         cursor.execute(sql)
         if cursor is not None:
@@ -172,11 +172,26 @@ def get_Country(movie_id):
     return 0
 
 
-# 登录用户设置对电影的喜欢/不喜欢
-def set_Movielike(movie_id, uid, like_choice):
+def update_Movielike(movie_id, uid, like_choice):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "insert into movie_like(uid,movie_id,like_choice) values(%d,%d,%d)" % (uid, movie_id, like_choice)
+    sql = "update movie_like set like_choice=%s where uid=%s and movie_id=%s" % (like_choice, uid, movie_id)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return 1
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 登录用户设置对电影的喜欢/不喜欢
+def set_Movielike(movie_id, uid):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "insert into movie_like(uid,movie_id,like_choice) values(%s,%s,0)" % (uid, movie_id)
     try:
         cursor.execute(sql)
         conn.commit()
