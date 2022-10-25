@@ -136,7 +136,7 @@ def search_movieDetail(movie_id):
 def get_Genre(movie_id):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie_genres where movie_id=%d" % movie_id
+    sql = "select * from movie_genres where movie_id=%s" % movie_id
     try:
         cursor.execute(sql)
         if cursor is not None:
@@ -156,7 +156,7 @@ def get_Genre(movie_id):
 def get_Country(movie_id):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie_countries where movie_id=%d" % movie_id
+    sql = "select * from movie_countries where movie_id=%s" % movie_id
     try:
         cursor.execute(sql)
         if cursor is not None:
