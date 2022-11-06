@@ -27,7 +27,7 @@ def person_latest(person_id):
             movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2], 'rating': data[i][3], 'img': data[i][5],
                      'tags': data[i][6], 'desc': data[i][7], 'genre': genres, 'country': countries}
             movie_data.append(movie)
-        return Response(json.dumps({'status': 0, 'msg': "影人最新5部电影返回成功", 'data': movie_data}),
+        return Response(json.dumps({'status': 0, 'msg': "影人最新5部电影返回成功", 'list': movie_data}),
                         content_type='application/json')
     else:
         return Response(json.dumps({'status': 1, 'msg': "影人最新5部电影返回失败"}), content_type='application/json')
