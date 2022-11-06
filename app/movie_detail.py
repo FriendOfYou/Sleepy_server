@@ -1,5 +1,6 @@
 import json
 
+import json5
 from flask import Response, json
 
 from app import app
@@ -25,7 +26,7 @@ def detail_movie(movie_id):
 
         return Response(json.dumps({'status': 0,
                                     'data': {'id': movie[0], 'name': movie[1], 'year': movie[2], 'rating': movie[3],
-                                             'img': movie[5], 'tags': movie[6], 'desc': movie[7],
+                                             'img': movie[5], 'tags': json5.loads(movie[6]), 'desc': movie[7],
                                              'genre': genres, 'country': countries}, 'msg': "电影查询成功"}),
                         content_type='application/json')
     else:

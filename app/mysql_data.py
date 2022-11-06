@@ -430,3 +430,45 @@ def judge_Personlike(person_id, uid):
     cursor.close()
     conn.close()
     return 0
+
+
+# 根据影人id查询其最新的五部电影
+def search_personLatest(person_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from movie where movie_id in (select movie_id where person_id= %s ) ORDER BY " \
+          "year DESC LIMIT 0,5" % person_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 根据影人id查询Top的五部电影
+def search_personTop(person_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from movie where movie_id in (select movie_id where person_id= %s ) ORDER BY " \
+          "rating DESC LIMIT 0,5" % person_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
