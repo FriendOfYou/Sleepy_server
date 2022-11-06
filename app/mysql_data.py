@@ -436,7 +436,7 @@ def judge_Personlike(person_id, uid):
 def search_personLatest(person_id):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie where movie_id in (select movie_id where person_id= %s ) ORDER BY " \
+    sql = "select * from movie where movie_id in (select movie_id from relationship where person_id= %s ) ORDER BY " \
           "year DESC LIMIT 0,5" % person_id
     try:
         cursor.execute(sql)
@@ -457,7 +457,7 @@ def search_personLatest(person_id):
 def search_personTop(person_id):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie where movie_id in (select movie_id where person_id= %s ) ORDER BY " \
+    sql = "select * from movie where movie_id in (select movie_id from relationship where person_id= %s ) ORDER BY " \
           "rating DESC LIMIT 0,5" % person_id
     try:
         cursor.execute(sql)

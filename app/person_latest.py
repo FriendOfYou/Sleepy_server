@@ -30,4 +30,4 @@ def person_latest(person_id):
         return Response(json.dumps({'status': 0, 'msg': "影人最新5部电影返回成功", 'data': movie_data}),
                         content_type='application/json')
     else:
-        return Response(json.dumps({'status': 1, 'msg': "影人最新5部电影返回成功"}), content_type='application/json')
+        return Response(json.dumps({'status': 1, 'msg': "影人最新5部电影返回失败"}), content_type='application/json')
