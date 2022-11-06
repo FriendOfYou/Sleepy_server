@@ -16,13 +16,13 @@ def person_top(person_id):
             genre = get_Genre(data[i][0])
             genres = []
             for j in range(len(genre)):
-                genre_data = {'id': genre[i][1], 'name': genre[i][2]}  # 体裁的id和体裁名称
+                genre_data = {'id': genre[j][1], 'name': genre[j][2]}  # 体裁的id和体裁名称
                 genres.append(genre_data)
             # 获取电影所属国家/地区信息
             country = get_Country(data[i][0])
             countries = []
             for j in range(len(country)):
-                country_data = {'id': country[i][1], 'name': country[i][2]}  # 所属国家/地区的id和名称
+                country_data = {'id': country[j][1], 'name': country[j][2]}  # 所属国家/地区的id和名称
                 countries.append(country_data)
             movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2], 'rating': data[i][3], 'img': data[i][5],
                      'tags': data[i][6], 'desc': data[i][7], 'genre': genres, 'country': countries}
