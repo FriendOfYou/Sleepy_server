@@ -8,7 +8,7 @@ from app.mysql_data import search_personPartner, search_personDetail
 
 @app.route('/person/<person_id>/partners', methods=['POST', 'GET'])
 def person_partner(person_id):
-    data = search_personPartner(person_id)  # 五个合作次数最多的
+    data = search_personPartner(person_id)  # 五 个合作次数最多的
     if data != 0:
         persons_data = []  # 存放最新的电影数据
         for i in range(len(data)):  # 添加电影数据
