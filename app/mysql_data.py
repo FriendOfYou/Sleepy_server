@@ -472,3 +472,25 @@ def search_personTop(person_id):
     cursor.close()
     conn.close()
     return 0
+
+
+# 根据影人id查询Partner的五部电影
+def search_personPartner(person_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "SELECT person_id, COUNT(person_id)AS number FROM relationship WHERE movie_id IN (SELECT movie_id FROM " \
+          "relationship WHERE person_id=%s)AND person_id!=%s GROUP BY person_id  ORDER BY number DESC LIMIT" \
+          " 0,5" % (person_id, person_id)
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
