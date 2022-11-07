@@ -5,7 +5,7 @@ import re
 pymysql.install_as_MySQLdb()
 
 
-# 连接数据库
+# 连 接数据库
 def mysql_conn():
     return pymysql.connect(
         host='127.0.0.1',
