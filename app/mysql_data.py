@@ -285,6 +285,9 @@ def search_movieList(genres, countries, syear, eyear, sortby, page, size):
     try:
         sql = "select * from movie "
         if genres != [] or countries != [] or syear is not None or eyear is not None:
+            print("jinru")
+            print(genres)
+            print(countries)
             sql = sql + "where "
             if genres is not None and genres != [] and countries is not None and countries != []:
                 sql = sql + "movie_id in (select distinct movie_id from movie_genres where "
