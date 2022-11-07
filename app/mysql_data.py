@@ -320,9 +320,9 @@ def search_movieList(genres, countries, syear, eyear, sortby, page, size):
             if 'rate' in sortby:
                 sql = sql + "ORDER BY rating DESC "
             elif 'yearinc' in sortby:
-                sql = sql + "ORDER BY year ASC "
+                sql = sql + "ORDER BY movie.year ASC "
             elif 'yeardec' in sortby:
-                sql = sql + "ORDER BY year DESC "
+                sql = sql + "ORDER BY movie.year DESC "
         else:
             sql = sql + "ORDER BY movie_id "
         if size is not None and page is not None:
