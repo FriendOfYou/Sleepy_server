@@ -32,19 +32,19 @@ def movie_list():
         movies = []
         for i in range(len(data)):
             genre = get_Genre(data[i][0])
-            genres = []
+            genres1 = []
             for j in range(len(genre)):
                 genre_data = {'id': genre[j][1], 'name': genre[j][2]}  # 体裁的id和体裁名称
-                genres.append(genre_data)
+                genres1.append(genre_data)
             country = get_Country(data[i][0])
-            countries = []
+            countries1 = []
             for k in range(len(country)):
                 country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
-                countries.append(country_data)
+                countries1.append(country_data)
             # data[i][5]=str(data[i][5]).replace('\'', '"')
             movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
                      'rating': data[i][3], 'img': data[i][5], 'tags': json5.loads(data[i][6]),
-                     'desc': data[i][7], 'genre': genres, 'country': countries}
+                     'desc': data[i][7], 'genre': genres1, 'country': countries1}
             movies.append(movie)
         total_line = count_tableLine(genres, countries, syear, eyear)
         total = int(len(total_line) / size)
