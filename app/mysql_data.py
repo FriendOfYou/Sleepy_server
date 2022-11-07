@@ -25,9 +25,9 @@ def count_tableLine(genres, countries, syear, eyear):
     try:
         sql = "select movie_id from movie "
         if genres != [] or countries != [] or syear is not None or eyear is not None:
-            sql = sql + "where movie_id in "
+            sql = sql + "where "
             if genres is not None and genres != [] and countries is not None and countries != []:
-                sql = sql + "(select distinct movie_id from movie_genres where "
+                sql = sql + "movie_id in (select distinct movie_id from movie_genres where "
                 for i in range(len(genres)):
                     sql = sql + "genre_id=%s OR " % genres[i]
                 sql = sql[:-3]
