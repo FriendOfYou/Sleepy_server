@@ -39,7 +39,7 @@ def movie_list():
             country = get_Country(data[i][0])
             countries = []
             for k in range(len(country)):
-                country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
+                country_data = {'id': country[k][1], 'name': country[k][2]}  #  所属国家/地区的id和名称
                 countries.append(country_data)
             # data[i][5]=str(data[i][5]).replace('\'', '"')
             movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
