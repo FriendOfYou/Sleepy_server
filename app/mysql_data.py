@@ -18,6 +18,60 @@ def mysql_conn():
     )
 
 
+# 查询某表的总行数、
+def count_tableLine(genres, countries, syear, eyear):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    try:
+        sql = "select movie_id from movie "
+        if genres != [] or countries != [] or syear is not None or eyear is not None:
+            sql = sql + "where movie_id in "
+            if genres is not None and genres != [] and countries is not None and countries != []:
+                sql = sql + "(select distinct movie_id from movie_genres where "
+                for i in range(len(genres)):
+                    sql = sql + "genre_id=%s OR " % genres[i]
+                sql = sql[:-3]
+                sql = sql + " UNION "
+                sql = sql + "select distinct movie_id from movie_countries where "
+                for i in range(len(countries)):
+                    sql = sql + "country_id=%s OR " % countries[i]
+                sql = sql[:-3]
+                sql = sql + ") AND "
+            elif genres is not None and genres != []:
+                sql = sql + "(select distinct movie_id from movie_genres where "
+                for i in range(len(genres)):
+                    sql = sql + "genre_id=%s OR " % genres[i]
+                sql = sql[:-3]
+                sql = sql + ") AND "
+            elif countries is not None and countries != []:
+                sql = sql + "(select distinct movie_id from movie_countries where "
+                for i in range(len(countries)):
+                    sql = sql + "country_id=%s OR " % countries[i]
+                sql = sql[:-3]
+                sql = sql + ") AND "
+            if syear is not None:
+                sql = sql + "movie.year>=%d " % syear
+                sql = sql + "AND "
+            if eyear is not None:
+                sql = sql + "movie.year <=%d " % eyear
+                sql = sql + "AND "
+            sql = sql[:-4]
+
+        cursor.execute(sql)
+
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
 # user
 # 注册新用户，向register_validate中存入数据
 def validate_insert(email, captcha, available):
@@ -225,43 +279,53 @@ def judge_Movielike(movie_id, uid):
 
 
 # 返回约束条件下的电影列
-def search_movieList(genres, countries, syear, eyear, sortby):
+def search_movieList(genres, countries, syear, eyear, sortby, page, size):
     conn = mysql_conn()
     cursor = conn.cursor()
     try:
-        sql = "select distinct movie.movie_id,movie.movie_name,movie.year,movie.rating,movie.movie_img,movie.tags," \
-              "movie.movie_summary,movie.genre,movie.country from movie "
-        if genres != []:
-            sql = sql + ",movie_genres "
-        if countries != []:
-            sql = sql + ",movie_countries "
+        sql = "select * from movie "
         if genres != [] or countries != [] or syear is not None or eyear is not None:
-            sql = sql + "where "
-            if genres is not None and genres != []:
-                sql = sql + "movie.movie_id=movie_genres.movie_id AND "
+            sql = sql + "where movie_id in "
+            if genres is not None and genres != [] and countries is not None and countries != []:
+                sql = sql + "(select distinct movie_id from movie_genres where "
                 for i in range(len(genres)):
-                    sql = sql + "movie_genres.genre_id=%s OR " % genres[i]
+                    sql = sql + "genre_id=%s OR " % genres[i]
                 sql = sql[:-3]
-                sql = sql + "AND "
-            if countries is not None and countries != []:
-                sql = sql + "movie.movie_id=movie_countries.movie_id AND "
+                sql = sql + " UNION "
+                sql = sql + "select distinct movie_id from movie_countries where "
                 for i in range(len(countries)):
-                    sql = sql + "movie_countries.country_id=%s OR " % countries[i]
+                    sql = sql + "country_id=%s OR " % countries[i]
                 sql = sql[:-3]
+                sql = sql + ") AND "
+            elif genres is not None and genres != []:
+                sql = sql + "(select distinct movie_id from movie_genres where "
+                for i in range(len(genres)):
+                    sql = sql + "genre_id=%s OR " % genres[i]
+                sql = sql[:-3]
+                sql = sql + ") AND "
+            elif countries is not None and countries != []:
+                sql = sql + "(select distinct movie_id from movie_countries where "
+                for i in range(len(countries)):
+                    sql = sql + "country_id=%s OR " % countries[i]
+                sql = sql[:-3]
+                sql = sql + ") AND "
+            if syear is not None:
+                sql = sql + "movie.year>=%d " % syear
                 sql = sql + "AND "
-            if syear is not None or eyear is not None:
-                sql = sql + "movie.year>=%d AND movie.year <=%d " % (syear, eyear)
+            if eyear is not None:
+                sql = sql + "movie.year <=%d " % eyear
                 sql = sql + "AND "
             sql = sql[:-4]
-
         if sortby is not None:
             if 'rate' in sortby:
-                sql = sql + "ORDER BY movie.rating DESC"
+                sql = sql + "ORDER BY rating DESC "
             elif 'yearinc' in sortby:
-                sql = sql + "ORDER BY movie.year ASC"
+                sql = sql + "ORDER BY year ASC "
             elif 'yeardec' in sortby:
-                sql = sql + "ORDER BY movie.year DESC"
-        print(sql)
+                sql = sql + "ORDER BY year DESC "
+        if size is not None and page is not None:
+            sql = sql + "LIMIT %s , %s " % (size * (page - 1), size * page)
+
         cursor.execute(sql)
 
         if cursor is not None:

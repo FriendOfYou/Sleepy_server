@@ -1,8 +1,8 @@
-import json,json5
+import json, json5
 from flask import request, Response, json, session
 
 from app import app
-from app.mysql_data import search_movieList, get_Genre, get_Country
+from app.mysql_data import search_movieList, get_Genre, get_Country, count_tableLine
 
 
 @app.route('/movie/list', methods=['GET'])
@@ -27,44 +27,27 @@ def movie_list():
     if eyear is not None:
         eyear = int(request.args.get('eyear'))
 
-    data = search_movieList(genres, countries, syear, eyear, sortby)
+    data = search_movieList(genres, countries, syear, eyear, sortby, page, size)
     if data != 0:
         movies = []
-        if page * size < len(data):
-            for i in range(size * (page - 1), page * size):
-                genre = get_Genre(data[i][0])
-                genres = []
-                for j in range(len(genre)):
-                    genre_data = {'id': genre[j][1], 'name': genre[j][2]}  # 体裁的id和体裁名称
-                    genres.append(genre_data)
-                country = get_Country(data[i][0])
-                countries = []
-                for k in range(len(country)):
-                    country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
-                    countries.append(country_data)
-                # data[i][5]=str(data[i][5]).replace('\'', '"')
-                movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
-                         'rating': data[i][3], 'img': data[i][4], 'tags': json5.loads(data[i][5]),
-                         'desc': data[i][6], 'genre': genres, 'country': countries}
-                movies.append(movie)
-        else:
-            for i in range(size * (page - 1), len(data)):
-                genre = get_Genre(data[i][0])
-                genres = []
-                for j in range(len(genre)):
-                    genre_data = {'id': genre[j][1], 'name': genre[j][2]}  # 体裁的id和体裁名称
-                    genres.append(genre_data)
-                country = get_Country(data[i][0])
-                countries = []
-                for k in range(len(country)):
-                    country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
-                    countries.append(country_data)
-                # data[i][5] = str(data[i][5]).replace('\'', '"')
-                movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
-                         'rating': data[i][3], 'img': data[i][4], 'tags': json5.loads(data[i][5]),
-                         'desc': data[i][6], 'genre': genres, 'country': countries}
-                movies.append(movie)
-        total = int(len(data) / size)
+        for i in range(len(data)):
+            genre = get_Genre(data[i][0])
+            genres = []
+            for j in range(len(genre)):
+                genre_data = {'id': genre[j][1], 'name': genre[j][2]}  # 体裁的id和体裁名称
+                genres.append(genre_data)
+            country = get_Country(data[i][0])
+            countries = []
+            for k in range(len(country)):
+                country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
+                countries.append(country_data)
+            # data[i][5]=str(data[i][5]).replace('\'', '"')
+            movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
+                     'rating': data[i][3], 'img': data[i][4], 'tags': json5.loads(data[i][5]),
+                     'desc': data[i][6], 'genre': genres, 'country': countries}
+            movies.append(movie)
+        total_line = count_tableLine(genres, countries, syear, eyear)
+        total = int(len(total_line) / size)
         if total * size != len(data):
             total = total + 1
         return Response(json.dumps({'status': 0, 'msg': "电影列表信息获取成功",
@@ -75,4 +58,3 @@ def movie_list():
         return Response(json.dumps({'status': 1, 'msg': "电影列表信息获取失败",
                                     'data': None}),
                         content_type='application/json')
-
