@@ -43,8 +43,8 @@ def movie_list():
                 countries.append(country_data)
             # data[i][5]=str(data[i][5]).replace('\'', '"')
             movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
-                     'rating': data[i][3], 'img': data[i][4], 'tags': json5.loads(data[i][5]),
-                     'desc': data[i][6], 'genre': genres, 'country': countries}
+                     'rating': data[i][3], 'img': data[i][5], 'tags': json5.loads(data[i][6]),
+                     'desc': data[i][7], 'genre': genres, 'country': countries}
             movies.append(movie)
         total_line = count_tableLine(genres, countries, syear, eyear)
         total = int(len(total_line) / size)
