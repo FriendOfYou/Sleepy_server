@@ -27,6 +27,8 @@ def movie_list():
     if eyear is not None:
         eyear = int(request.args.get('eyear'))
 
+    print(genres)
+    print(countries)
     data = search_movieList(genres, countries, syear, eyear, sortby, page, size)
     if data != 0:
         movies = []
