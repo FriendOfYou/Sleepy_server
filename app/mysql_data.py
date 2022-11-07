@@ -323,6 +323,8 @@ def search_movieList(genres, countries, syear, eyear, sortby, page, size):
                 sql = sql + "ORDER BY year ASC "
             elif 'yeardec' in sortby:
                 sql = sql + "ORDER BY year DESC "
+        else:
+            sql = sql + "ORDER BY movie_id "
         if size is not None and page is not None:
             sql = sql + "LIMIT %s , %s " % (size * (page - 1), size * page)
         cursor.execute(sql)
