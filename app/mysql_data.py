@@ -323,12 +323,12 @@ def search_movieList(genres, countries, syear, eyear, sortby, page, size):
                 sql = sql + "ORDER BY movie.year ASC "
             elif 'yeardec' in sortby:
                 sql = sql + "ORDER BY movie.year DESC "
-        else:
-            sql = sql + "ORDER BY movie_id "
+            else:
+                sql = sql + "ORDER BY movie_id "
         if size is not None and page is not None:
             sql = sql + "LIMIT %s , %s " % (size * (page - 1), size * page)
         cursor.execute(sql)
-
+        print(sql)
         if cursor is not None:
             row = cursor.fetchall()
             if row is not None:
@@ -389,6 +389,26 @@ def search_moviePersons(movie_id):
     sql = "select relationship.role, relationship.person_id, person.person_name, person.sex, person.birthday, " \
           "person.birthplace, person.person_summary, person.person_img from relationship,person where " \
           "relationship.movie_id='%s' and relationship.person_id=person.person_id" % movie_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 返回相似电影
+def search_movieSimilar(movie_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from movie where movie_id>%s limit 0,3" % movie_id
     try:
         cursor.execute(sql)
         if cursor is not None:
