@@ -14,12 +14,12 @@ def movie_list():
     if size is not None:
         size = int(request.args.get('size'))
     sortby = request.args.get('sortby')  # 获取的电影的排序顺序，按评分
-    genres = request.args.getlist('genre')  # 电影类型筛选，传入genre的id，一次至多3个;将其转化为int类型
+    genres = request.args.getlist('genre[]')  # 电影类型筛选，传入genre的id，一次至多3个;将其转化为int类型
     if genres:
-        genres = list(map(int, request.args.getlist('genre')))
-    countries = request.args.getlist('country')  # 电影国家筛选 传入country的id
+        genres = list(map(int, request.args.getlist('genre[]')))
+    countries = request.args.getlist('country[]')  # 电影国家筛选 传入country的id
     if countries:
-        countries = list(map(int, request.args.getlist('country')))
+        countries = list(map(int, request.args.getlist('country[]')))
     syear = request.args.getlist('syear')  # 电影筛选开始年份
     if syear is not None:
         syear = int(request.args.get('syear'))

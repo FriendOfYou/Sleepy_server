@@ -21,7 +21,7 @@ def movie_likeList():
     like = request.args.get('like')  # 电影筛选开始年份
     if like is not None:
         like = int(request.args.get('like'))
-    if like != 1 or like != -1:
+    if like != 1 and like != -1:
         return Response(json.dumps({'status': 1, 'msg': "喜欢或不喜欢的标记出错",
                                     'data': None}),
                         content_type='application/json')
