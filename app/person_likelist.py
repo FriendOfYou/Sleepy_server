@@ -2,37 +2,37 @@ import json, json5
 from flask import request, Response, json, session
 
 from app import app
-from app.mysql_data import search_movieList, get_Genre, get_Country, count_tableLine
+from app.mysql_data import search_polikeList, get_Genre, get_Country
 
 
-@app.route('/movie/list', methods=['GET'])
-def movie_list():
+@app.route('/person/like/list', methods=['GET'])
+def person_likeList():
+    # 对用户登陆状态进行检查
+    uid = session.get('uid')  # 从session读取用户uid
+    if uid is None:
+        return Response(json.dumps({'status': 1, 'msg': "用户未登录"}),
+                        content_type='application/json')
     page = request.args.get('page')  # 电影所在页的页码；转化为int类型
     if page is not None:
         page = int(request.args.get('page'))
     size = request.args.get('size')  # 每页返回的最大对象数量；转化为int类型
     if size is not None:
         size = int(request.args.get('size'))
-    sortby = request.args.get('sortby')  # 获取的电影的排序顺序，按评分
-    genres = request.args.getlist('genre')  # 电影类型筛选，传入genre的id，一次至多3个;将其转化为int类型
-    if genres:
-        genres = list(map(int, request.args.getlist('genre')))
-    countries = request.args.getlist('country')  # 电影国家筛选 传入country的id
-    if countries:
-        countries = list(map(int, request.args.getlist('country')))
-    syear = request.args.getlist('syear')  # 电影筛选开始年份
-    if syear is not None:
-        syear = int(request.args.get('syear'))
-    eyear = request.args.getlist('eyear')  # 电影筛选结束年份
-    if eyear is not None:
-        eyear = int(request.args.get('eyear'))
-
-    print(genres)
-    print(countries)
-    data = search_movieList(genres, countries, syear, eyear, sortby, page, size)
+    like = request.args.get('like')  # 电影筛选开始年份
+    if like is not None:
+        like = int(request.args.get('like'))
+    if like != 1 or like != -1:
+        return Response(json.dumps({'status': 1, 'msg': "喜欢或不喜欢的标记出错",
+                                    'data': None}),
+                        content_type='application/json')
+    data = search_polikeList(uid, like)
     if data != 0:
         movies = []
-        for i in range(len(data)):
+        lengthEnd = page * size
+        lengthStart = (page - 1) * size
+        if page * size > len(data):
+            lengthEnd = len(data)
+        for i in range(lengthStart, lengthEnd):
             genre = get_Genre(data[i][0])
             genres1 = []
             for j in range(len(genre)):
@@ -43,16 +43,14 @@ def movie_list():
             for k in range(len(country)):
                 country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
                 countries1.append(country_data)
-            # data[i][5]=str(data[i][5]).replace('\'', '"')
             movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
                      'rating': data[i][3], 'img': data[i][5], 'tags': json5.loads(data[i][6]),
                      'desc': data[i][7], 'genre': genres1, 'country': countries1}
             movies.append(movie)
-        total_line = count_tableLine(genres, countries, syear, eyear)
-        total = int(len(total_line) / size)
-        if total * size != len(total_line):
+        total = int(len(data) / size)
+        if total * size != len(data):
             total = total + 1
-        return Response(json.dumps({'status': 0, 'msg': "电影列表信息获取成功",
+        return Response(json.dumps({'status': 0, 'msg': "电影喜欢/不喜欢列表信息获取成功",
                                     'data': {'page': page, 'total': total, 'list': movies}}),
                         content_type='application/json')
 

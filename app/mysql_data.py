@@ -38,13 +38,13 @@ def count_tableLine(genres, countries, syear, eyear):
                 sql = sql[:-3]
                 sql = sql + ") AND "
             elif genres is not None and genres != []:
-                sql = sql + "(select distinct movie_id from movie_genres where "
+                sql = sql + "movie_id in (select distinct movie_id from movie_genres where "
                 for i in range(len(genres)):
                     sql = sql + "genre_id=%s OR " % genres[i]
                 sql = sql[:-3]
                 sql = sql + ") AND "
             elif countries is not None and countries != []:
-                sql = sql + "(select distinct movie_id from movie_countries where "
+                sql = sql + "movie_id in (select distinct movie_id from movie_countries where "
                 for i in range(len(countries)):
                     sql = sql + "country_id=%s OR " % countries[i]
                 sql = sql[:-3]
@@ -278,6 +278,46 @@ def judge_Movielike(movie_id, uid):
     return 0
 
 
+# 登录用户返回喜欢/不喜欢电影的列表
+def search_molikeList(uid, like):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from movie_like where uid=%s and like=%s" % (uid, like)
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 登录用户返回喜欢/不喜欢影人的列表
+def search_polikeList(uid, like):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from person_like where uid=%s and like_choice=%s" % (uid, like)
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
 # 返回约束条件下的电影列
 def search_movieList(genres, countries, syear, eyear, sortby, page, size):
     conn = mysql_conn()
@@ -298,13 +338,13 @@ def search_movieList(genres, countries, syear, eyear, sortby, page, size):
                 sql = sql[:-3]
                 sql = sql + ") AND "
             elif genres is not None and genres != []:
-                sql = sql + "(select distinct movie_id from movie_genres where "
+                sql = sql + "movie_id in (select distinct movie_id from movie_genres where "
                 for i in range(len(genres)):
                     sql = sql + "genre_id=%s OR " % genres[i]
                 sql = sql[:-3]
                 sql = sql + ") AND "
             elif countries is not None and countries != []:
-                sql = sql + "(select distinct movie_id from movie_countries where "
+                sql = sql + "movie_id in (select distinct movie_id from movie_countries where "
                 for i in range(len(countries)):
                     sql = sql + "country_id=%s OR " % countries[i]
                 sql = sql[:-3]
@@ -327,8 +367,8 @@ def search_movieList(genres, countries, syear, eyear, sortby, page, size):
                 sql = sql + "ORDER BY movie_id "
         if size is not None and page is not None:
             sql = sql + "LIMIT %s , %s " % (size * (page - 1), size * page)
-        cursor.execute(sql)
         print(sql)
+        cursor.execute(sql)
         if cursor is not None:
             row = cursor.fetchall()
             if row is not None:
