@@ -55,7 +55,7 @@ def movie_likeList():
                         content_type='application/json')
     elif data == 0:
         return Response(json.dumps({'status': 0, 'msg': "该用户没有喜欢或不喜欢的电影",
-                                    'data': None}),
+                                    'data':  {'nomore':True}}),
                         content_type='application/json')
     else:
         return Response(json.dumps({'status': 1, 'msg': "电影列表信息获取失败",
