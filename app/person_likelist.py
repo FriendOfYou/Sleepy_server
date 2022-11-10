@@ -50,8 +50,8 @@ def person_likeList():
         total = int(len(data) / size)
         if total * size != len(data):
             total = total + 1
-        return Response(json.dumps({'status': 0, 'msg': "影人喜欢/不喜欢列表信息获取成功", 'nomore': page == total,
-                                    'data': {'page': page, 'total': total, 'list': movies}}),
+        return Response(json.dumps({'status': 0, 'msg': "影人喜欢/不喜欢列表信息获取成功",
+                                    'data': {'page': page, 'total': total, 'nomore': page == total, 'list': movies}}),
                         content_type='application/json')
     elif data == 0:
         return Response(json.dumps({'status': 0, 'msg': "该用户没有标记影人",
