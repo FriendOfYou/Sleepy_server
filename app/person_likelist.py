@@ -33,25 +33,15 @@ def person_likeList():
         if page * size > len(data):
             lengthEnd = len(data)
         for i in range(lengthStart, lengthEnd):
-            genre = get_Genre(data[i][0])
-            genres1 = []
-            for j in range(len(genre)):
-                genre_data = {'id': genre[j][1], 'name': genre[j][2]}  # 体裁的id和体裁名称
-                genres1.append(genre_data)
-            country = get_Country(data[i][0])
-            countries1 = []
-            for k in range(len(country)):
-                country_data = {'id': country[k][1], 'name': country[k][2]}  # 所属国家/地区的id和名称
-                countries1.append(country_data)
-            movie = {'id': data[i][0], 'name': data[i][1], 'year': data[i][2],
-                     'rating': data[i][3], 'img': data[i][5], 'tags': json5.loads(data[i][6]),
-                     'desc': data[i][7], 'genre': genres1, 'country': countries1}
+            movie = {'id': data[i][0], 'name': data[i][1], 'sex': data[i][3],
+                     'birthday': data[i][4], 'birthplace': data[i][5], 'summary': data[i][6],
+                     'img': data[i][2]}
             movies.append(movie)
         total = int(len(data) / size)
         if total * size != len(data):
             total = total + 1
         return Response(json.dumps({'status': 0, 'msg': "影人喜欢/不喜欢列表信息获取成功",
-                                    'data': {'page': page, 'total': total, 'nomore': page == total, 'list': movies}}),
+                                    'data': {'page': page, 'total': total, 'nomore': page >= total, 'list': movies}}),
                         content_type='application/json')
     elif data == 0:
         return Response(json.dumps({'status': 0, 'msg': "该用户没有标记影人",
