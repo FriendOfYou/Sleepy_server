@@ -21,12 +21,12 @@ def person_likeList():
     like = request.args.get('like')  # 电影筛选开始年份
     if like is not None:
         like = int(request.args.get('like'))
-    if like != 1 or like != -1:
+    if like != 1 and like != -1:
         return Response(json.dumps({'status': 1, 'msg': "喜欢或不喜欢的标记出错",
                                     'data': None}),
                         content_type='application/json')
     data = search_polikeList(uid, like)
-    if data != 0:
+    if data != 0 and data != -1:
         movies = []
         lengthEnd = page * size
         lengthStart = (page - 1) * size
@@ -50,11 +50,14 @@ def person_likeList():
         total = int(len(data) / size)
         if total * size != len(data):
             total = total + 1
-        return Response(json.dumps({'status': 0, 'msg': "电影喜欢/不喜欢列表信息获取成功",
+        return Response(json.dumps({'status': 0, 'msg': "影人喜欢/不喜欢列表信息获取成功",
                                     'data': {'page': page, 'total': total, 'list': movies}}),
                         content_type='application/json')
-
+    elif data == 0:
+        return Response(json.dumps({'status': 0, 'msg': "该用户没有标记影人",
+                                    'data': None}),
+                        content_type='application/json')
     else:
-        return Response(json.dumps({'status': 1, 'msg': "电影列表信息获取失败",
+        return Response(json.dumps({'status': 1, 'msg': "标记影人列表信息获取失败",
                                     'data': None}),
                         content_type='application/json')

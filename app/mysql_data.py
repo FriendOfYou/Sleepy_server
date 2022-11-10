@@ -229,7 +229,7 @@ def get_Country(movie_id):
 def update_Movielike(movie_id, uid, like_choice):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "update movie_like set like_choice=%s where uid=%s and movie_id=%s" % (like_choice, uid, movie_id)
+    sql = "update movie_like set like=%s where uid=%s and movie_id=%s" % (like_choice, uid, movie_id)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -245,7 +245,7 @@ def update_Movielike(movie_id, uid, like_choice):
 def set_Movielike(movie_id, uid):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "insert into movie_like(uid,movie_id,like_choice) values(%s,%s,0)" % (uid, movie_id)
+    sql = "insert into movie_like(uid,movie_id,like) values(%s,%s,0)" % (uid, movie_id)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -291,11 +291,13 @@ def search_molikeList(uid, like):
                 cursor.close()
                 conn.close()
                 return row
+        else:
+            return 0
     except Exception as e:
         print(e)
     cursor.close()
     conn.close()
-    return 0
+    return -1
 
 
 # 登录用户返回喜欢/不喜欢影人的列表
@@ -311,11 +313,13 @@ def search_polikeList(uid, like):
                 cursor.close()
                 conn.close()
                 return row
+        else:
+            return 0
     except Exception as e:
         print(e)
     cursor.close()
     conn.close()
-    return 0
+    return -1
 
 
 # 返回约束条件下的电影列

@@ -26,7 +26,7 @@ def movie_likeList():
                                     'data': None}),
                         content_type='application/json')
     data = search_molikeList(uid, like)
-    if data != 0:
+    if data != -1 and data != 0:
         movies = []
         lengthEnd = page * size
         lengthStart = (page - 1) * size
@@ -53,7 +53,10 @@ def movie_likeList():
         return Response(json.dumps({'status': 0, 'msg': "电影喜欢/不喜欢列表信息获取成功",
                                     'data': {'page': page, 'total': total, 'list': movies}}),
                         content_type='application/json')
-
+    elif data == 0:
+        return Response(json.dumps({'status': 0, 'msg': "该用户没有喜欢或不喜欢的电影",
+                                    'data': None}),
+                        content_type='application/json')
     else:
         return Response(json.dumps({'status': 1, 'msg': "电影列表信息获取失败",
                                     'data': None}),
