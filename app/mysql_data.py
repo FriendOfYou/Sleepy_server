@@ -282,7 +282,8 @@ def judge_Movielike(movie_id, uid):
 def search_molikeList(uid, like):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie_like where uid=%s and movie_like.like=%s" % (uid, like)
+    sql = "select * from movie where movie_id " \
+          "in (select movie_id from movie_like where uid=%s and movie_like.like=%s)" % (uid, like)
     try:
         cursor.execute(sql)
         if cursor is not None:
@@ -304,7 +305,8 @@ def search_molikeList(uid, like):
 def search_polikeList(uid, like):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from person_like where uid=%s and like_choice=%s" % (uid, like)
+    sql = "select * from person where person_id " \
+          "in (select person_id from person_like where uid=%s and like_choice=%s)" % (uid, like)
     try:
         cursor.execute(sql)
         if cursor is not None:

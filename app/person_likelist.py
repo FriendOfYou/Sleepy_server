@@ -27,25 +27,25 @@ def person_likeList():
                         content_type='application/json')
     data = search_polikeList(uid, like)
     if data != 0 and data != -1:
-        movies = []
+        persons = []
         lengthEnd = page * size
         lengthStart = (page - 1) * size
         if page * size > len(data):
             lengthEnd = len(data)
         for i in range(lengthStart, lengthEnd):
-            movie = {'id': data[i][0], 'name': data[i][1], 'sex': data[i][3],
-                     'birthday': data[i][4], 'birthplace': data[i][5], 'summary': data[i][6],
-                     'img': data[i][2]}
-            movies.append(movie)
+            person = {'id': data[i][0], 'name': data[i][1], 'sex': data[i][3],
+                      'birthday': data[i][4], 'birthplace': data[i][5], 'summary': data[i][6],
+                      'img': data[i][2]}
+            persons.append(person)
         total = int(len(data) / size)
         if total * size != len(data):
             total = total + 1
         return Response(json.dumps({'status': 0, 'msg': "影人喜欢/不喜欢列表信息获取成功",
-                                    'data': {'page': page, 'total': total, 'nomore': page >= total, 'list': movies}}),
+                                    'data': {'page': page, 'total': total, 'nomore': page >= total, 'list': persons}}),
                         content_type='application/json')
     elif data == 0:
         return Response(json.dumps({'status': 0, 'msg': "该用户没有标记影人",
-                                    'data': {'nomore':True}}),
+                                    'data': {'nomore': True}}),
                         content_type='application/json')
     else:
         return Response(json.dumps({'status': 1, 'msg': "标记影人列表信息获取失败",
