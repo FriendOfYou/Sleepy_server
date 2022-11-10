@@ -50,7 +50,7 @@ def movie_likeList():
         total = int(len(data) / size)
         if total * size != len(data):
             total = total + 1
-        return Response(json.dumps({'status': 0, 'msg': "电影喜欢/不喜欢列表信息获取成功",
+        return Response(json.dumps({'status': 0, 'msg': "电影喜欢/不喜欢列表信息获取成功", 'nomore': page == total,
                                     'data': {'page': page, 'total': total, 'list': movies}}),
                         content_type='application/json')
     elif data == 0:
