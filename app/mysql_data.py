@@ -229,7 +229,7 @@ def get_Country(movie_id):
 def update_Movielike(movie_id, uid, like_choice):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "update movie_like set like=%s where uid=%s and movie_id=%s" % (like_choice, uid, movie_id)
+    sql = "update movie_like set movie_like.like=%s where uid=%s and movie_id=%s" % (like_choice, uid, movie_id)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -245,7 +245,7 @@ def update_Movielike(movie_id, uid, like_choice):
 def set_Movielike(movie_id, uid):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "insert into movie_like(uid,movie_id,like) values(%s,%s,0)" % (uid, movie_id)
+    sql = "insert into movie_like(uid,movie_id,movie_like.like) values(%s,%s,0)" % (uid, movie_id)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -282,7 +282,7 @@ def judge_Movielike(movie_id, uid):
 def search_molikeList(uid, like):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie_like where uid=%s and like=%s" % (uid, like)
+    sql = "select * from movie_like where uid=%s and movie_like.like=%s" % (uid, like)
     try:
         cursor.execute(sql)
         if cursor is not None:
