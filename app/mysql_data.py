@@ -165,6 +165,27 @@ def search_user(email, password):
 
 
 # movie
+# 根据关键字搜索电影
+def search_movie(word):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = """select * from movie where movie_name like '%%%s%%' limit 0,5""" % word
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+        print('没有这部电影')
+    cursor.close()
+    conn.close()
+    return 0
+
+
 # 根据电影id查询电影基本信息
 def search_movieDetail(movie_id):
     conn = mysql_conn()
@@ -471,6 +492,27 @@ def search_movieSimilar(movie_id):
 
 
 # person
+# 根据关键字搜索影人
+def search_person(word):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = """select * from person where person_name like '%%%s%%' limit 0,5""" % word
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+        print('没有这部电影')
+    cursor.close()
+    conn.close()
+    return 0
+
+
 # 查询影人列表
 def search_personList():
     conn = mysql_conn()
@@ -543,7 +585,7 @@ def set_Personlike(uid, person_id):
     return 0
 
 
-# 登录用户判断是否喜欢该电影
+# 登录用户判断是否喜欢该影人
 def judge_Personlike(person_id, uid):
     conn = mysql_conn()
     cursor = conn.cursor()
