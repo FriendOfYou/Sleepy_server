@@ -6,8 +6,8 @@ from app.mysql_data import search_person
 
 
 @app.route('/search/person', methods=['GET'])
-def person_likeList():
-    word = request.args.get('wd')  # 电影所在页的页码；转化为int类型
+def person_search():
+    word = request.args.get('wd')
     data = search_person(word)
     if data != 0:
         persons = []
