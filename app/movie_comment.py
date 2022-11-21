@@ -1,5 +1,6 @@
 import json
 import asyncio
+import nest_asyncio
 from flask import Response, json
 
 from TextAnalysis import TextAnalysis
@@ -25,6 +26,7 @@ async def analyze(s, good, bad):
 
 @app.route('/movie/<movie_id>/comments', methods=['POST', 'GET'])
 def comment_movie(movie_id):
+    nest_asyncio.apply()
     loop = asyncio.get_event_loop()
     comment_data = selectComment(movie_id)
     if comment_data != 0 and len(comment_data) != 0:
@@ -33,6 +35,7 @@ def comment_movie(movie_id):
         objects = [TextAnalysis(text=comment_data[i][1]) for i in range(len(comment_data))]
         tasks = [asyncio.create_task(analyze(s, good, bad)) for s in objects]
         loop.run_until_complete(run(tasks))
+
         good.sort(key=lambda x: x['readability'], reverse=True)
         bad.sort(key=lambda x: x['readability'], reverse=True)
         good = good[:3]
