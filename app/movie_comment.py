@@ -25,8 +25,8 @@ def comment_movie(movie_id):
                 bad.append(
                     {'comment': comment_data[i][1], 'readability': s.readability(),
                      'valence': s.sentiment_by_valence()['valence']})
-        good.sort(key=lambda x: x['readability'])
-        bad.sort(key=lambda x: x['readability'])
+        good.sort(key=lambda x: x['readability'], reverse=True)
+        bad.sort(key=lambda x: x['readability'], reverse=True)
         good = good[:3]
         bad = bad[:3]
         positive = []
