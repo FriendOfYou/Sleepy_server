@@ -354,28 +354,29 @@ def search_movieList(genres, countries, syear, eyear, sortby, page, size):
         if genres != [] or countries != [] or syear is not None or eyear is not None:
             sql = sql + "where "
             if genres is not None and genres != [] and countries is not None and countries != []:
-                sql = sql + "movie_id in (select distinct movie_id from movie_genres where "
+                sql = sql + "movie_id in (select movie_id from (select movie_id from movie_genres where "
                 for i in range(len(genres)):
                     sql = sql + "genre_id=%s OR " % genres[i]
                 sql = sql[:-3]
-                sql = sql + " UNION "
-                sql = sql + "select distinct movie_id from movie_countries where "
+                sql = sql + " GROUP BY movie_id HAVING COUNT(1)>=%s UNION ALL " % len(genres)
+                sql = sql + "select movie_id from movie_countries where "
                 for i in range(len(countries)):
                     sql = sql + "country_id=%s OR " % countries[i]
                 sql = sql[:-3]
-                sql = sql + ") AND "
+                sql = sql + "GROUP BY movie_id HAVING COUNT(1)>1)A GROUP BY A.movie_id HAVING COUNT(1)>=%s ) AND " % len(
+                    countries)
             elif genres is not None and genres != []:
-                sql = sql + "movie_id in (select distinct movie_id from movie_genres where "
+                sql = sql + "movie_id in (select movie_id from (select movie_id from movie_genres where "
                 for i in range(len(genres)):
                     sql = sql + "genre_id=%s OR " % genres[i]
                 sql = sql[:-3]
-                sql = sql + ") AND "
+                sql = sql + "GROUP BY movie_id HAVING COUNT(1)>=%s)A) AND " % len(genres)
             elif countries is not None and countries != []:
-                sql = sql + "movie_id in (select distinct movie_id from movie_countries where "
+                sql = sql + "movie_id in (select movie_id from (select movie_id from movie_countries where "
                 for i in range(len(countries)):
                     sql = sql + "country_id=%s OR " % countries[i]
                 sql = sql[:-3]
-                sql = sql + ") AND "
+                sql = sql + "GROUP BY movie_id HAVING COUNT(1)>=%s)A) AND " % len(countries)
             if syear is not None:
                 sql = sql + "movie.year>=%d " % syear
                 sql = sql + "AND "
@@ -486,6 +487,27 @@ def search_movieSimilar(movie_id):
                 return row
     except Exception as e:
         print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
+# 返回电影评论
+def selectComment(movie_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select * from comment where movie_id=%s" % movie_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+        print('error')
     cursor.close()
     conn.close()
     return 0
