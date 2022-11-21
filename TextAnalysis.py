@@ -30,6 +30,29 @@ class TextAnalysis:
     def frequency(self):
         return ct.term_freq(text=self.text, lang=self.lang)
 
+    # 可读性
+    async def readability_async(self):
+        return ct.readability(text=self.text, lang=self.lang).get("readability3")
+
+    # 情感强度
+    async def sentiment_by_valence_async(self):
+        dictionary = ct.load_pkl_dict('ChineseEmoBank.pkl')['ChineseEmoBank']
+        return ct.sentiment_by_valence(text=self.text, lang=self.lang, diction=dictionary)
+
+    # 情感
+    async def sentiment_async(self):
+        dictionary = ct.load_pkl_dict('DUTIR.pkl')['DUTIR']
+        return ct.sentiment(text=self.text, lang=self.lang, diction=dictionary)
+
+    # 积极性
+    async def positivity_async(self):
+        dictionary = ct.load_pkl_dict('Chinese_Loughran_McDonald_Financial_Sentiment.pkl')[
+            'Chinese_Loughran_McDonald_Financial_Sentiment']
+        return ct.sentiment(text=self.text, lang=self.lang, diction=dictionary)
+
+    # 词频
+    async def frequency_async(self):
+        return ct.term_freq(text=self.text, lang=self.lang)
 
 # if __name__ == '__main__':
     # comment_data = selectComment(1291543)

@@ -1,5 +1,5 @@
 import json
-
+import asyncio
 from flask import Response, json
 
 from TextAnalysis import TextAnalysis
@@ -7,24 +7,32 @@ from app import app
 from app.mysql_data import selectComment
 
 
+async def run(tasks):
+    await asyncio.wait(tasks)
+
+
+async def analyze(s, good, bad):
+    good_bad = s.positivity()
+    if good_bad['negative_num'] < good_bad['positive_num']:
+        good.append(
+            {'comment': s.text, 'readability': s.readability(),
+             'valence': s.sentiment_by_valence()['valence']})
+    elif good_bad['negative_num'] > good_bad['positive_num']:
+        bad.append(
+            {'comment': s.text, 'readability': s.readability(),
+             'valence': s.sentiment_by_valence()['valence']})
+
+
 @app.route('/movie/<movie_id>/comments', methods=['POST', 'GET'])
 def comment_movie(movie_id):
+    loop = asyncio.get_event_loop()
     comment_data = selectComment(movie_id)
     if comment_data != 0 and len(comment_data) != 0:
         good = []
         bad = []
-        for i in range(len(comment_data)):
-            text = comment_data[i][1]
-            s = TextAnalysis(text=text)
-            good_bad = s.positivity()
-            if good_bad['negative_num'] < good_bad['positive_num']:
-                good.append(
-                    {'comment': comment_data[i][1], 'readability': s.readability(),
-                     'valence': s.sentiment_by_valence()['valence']})
-            elif good_bad['negative_num'] > good_bad['positive_num']:
-                bad.append(
-                    {'comment': comment_data[i][1], 'readability': s.readability(),
-                     'valence': s.sentiment_by_valence()['valence']})
+        objects = [TextAnalysis(text=comment_data[i][1]) for i in range(len(comment_data))]
+        tasks = [asyncio.create_task(analyze(s, good, bad)) for s in objects]
+        loop.run_until_complete(run(tasks))
         good.sort(key=lambda x: x['readability'], reverse=True)
         bad.sort(key=lambda x: x['readability'], reverse=True)
         good = good[:3]

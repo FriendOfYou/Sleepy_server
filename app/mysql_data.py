@@ -511,8 +511,25 @@ def selectComment(movie_id):
     cursor.close()
     conn.close()
     return 0
-
-
+# 搜索所有工具人的电影评级
+def selectUserrate():
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select user_name,movie_id,rate from usrrate"
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+        print('error')
+    cursor.close()
+    conn.close()
+    return 0
 # person
 # 根据关键字搜索影人
 def search_person(word):
