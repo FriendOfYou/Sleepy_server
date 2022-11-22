@@ -19,10 +19,10 @@ def list_person():
     if person_data != 0:
         persons = []
         for i in range(len(person_data)):
-                person = {'id': person_data[i][0], 'name': person_data[i][1], 'sex': person_data[i][3],
-                          'birthday': person_data[i][4], 'birthplace': person_data[i][5], 'summary': person_data[i][6],
-                          'img': person_data[i][2]}
-                persons.append(person)
+            person = {'id': person_data[i][0], 'name': person_data[i][1], 'sex': person_data[i][3],
+                      'birthday': person_data[i][4], 'birthplace': person_data[i][5], 'summary': person_data[i][6],
+                      'img': person_data[i][2]}
+            persons.append(person)
         total = int(int(data[0]) / size)
         if total * size != int(data[0]):
             total = total + 1
