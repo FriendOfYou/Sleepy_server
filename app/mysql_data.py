@@ -8,7 +8,8 @@ pymysql.install_as_MySQLdb()
 # 连 接数据库
 def mysql_conn():
     return pymysql.connect(
-        host='127.0.0.1',
+        # host='127.0.0.1',
+        host='1.15.186.76',
         port=3306,
         user='root',
         # password='password',
@@ -394,7 +395,7 @@ def search_movieList(genres, countries, syear, eyear, sortby, page, size):
             else:
                 sql = sql + "ORDER BY movie_id "
         if size is not None and page is not None:
-            sql = sql + "LIMIT %s , %s " % (size * (page - 1), size * page)
+            sql = sql + "LIMIT %s , %s " % (size * (page - 1), size)
         print(sql)
         cursor.execute(sql)
         if cursor is not None:
