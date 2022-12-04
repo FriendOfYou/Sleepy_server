@@ -478,7 +478,7 @@ def search_movieSimilar(movie_id):
     conn = mysql_conn()
     cursor = conn.cursor()
     sql = "SELECT * FROM movie WHERE genre=(SELECT genre FROM movie WHERE movie_id=%s) and movie_id!=%s ORDER BY " \
-          "rating DESC" % (movie_id, movie_id)
+          "rating DESC limit 0, 3" % (movie_id, movie_id)
     try:
         cursor.execute(sql)
         if cursor is not None:
