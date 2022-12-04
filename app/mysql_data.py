@@ -477,11 +477,30 @@ def search_moviePersons(movie_id):
 def search_movieSimilar(movie_id):
     conn = mysql_conn()
     cursor = conn.cursor()
-    sql = "select * from movie where movie_id>%s limit 0,3" % movie_id
+    sql = "SELECT * FROM movie WHERE genre=(SELECT genre FROM movie WHERE movie_id=%s) ORDER BY rating DESC" % movie_id
     try:
         cursor.execute(sql)
         if cursor is not None:
             row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+# 获取某电影genre标签的个数
+def get_genreCount(movie_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select count(genre_id) from movie_genres where movie_id=%s" % movie_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchone()
             if row is not None:
                 cursor.close()
                 conn.close()

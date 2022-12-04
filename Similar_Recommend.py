@@ -11,7 +11,7 @@ class ItemBasedCF:
         for i in range(len(self.train_file)):
             user = self.train_file[i][0]
             item = self.train_file[i][1]
-            score = self.train_file[i][1]
+            score = self.train_file[i][2]
             self.train.setdefault(user, {})
             self.train[user][item] = int(float(score))
 
