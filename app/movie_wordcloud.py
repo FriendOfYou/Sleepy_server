@@ -21,14 +21,16 @@ def movie_wordCloud():
         tags = {}
         for i in range(len(data)):  # 添加电影数据
             movie_tag = search_movieTags(data[i][0])  # 获取电影id和电影的标签tags
-            tag = str(movie_tag[1])
+            tag = str(movie_tag[0][1])
             tag = tag[1:-1]
-            tag = tag.split(',')
+            tag = tag.split(', ')
+            for k in range(len(tag)):
+                tag[k] = tag[k][1:-1]
             for j in range(len(tag)):
-                if not tag[j][1:-1] in data.keys():  # tag[j][1:-1]表示第j个标签的具体内容，[1:-1]的目的是去除标签两端的‘’
-                    tags[tag[j][1:-1]] = {'tag_name': tag[j][1:-1], 'tag_count': 1, 'movie_example': data[i][0]}
+                if not tag[j] in tags.keys():  # tag[j][1:-1]表示第j个标签的具体内容，[1:-1]的目的是去除标签两端的‘’
+                    tags[tag[j]] = {'tag_name': tag[j], 'tag_count': 1, 'movie_example': data[i][0]}
                 else:
-                    tags[tag[j][1:-1]]['tag_count'] = tags[tag[j][1:-1]]['tag_count'] + 1
+                    tags[tag[j]]['tag_count'] = tags[tag[j]]['tag_count'] + 1
         for key in tags.keys():
             movie_tags = {'name': tags[key]['tag_name'], 'value': tags[key]['tag_count'],
                           'mid': tags[key]['movie_example']}
