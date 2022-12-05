@@ -21,7 +21,8 @@ def movie_wordCloud():
         tags = {}
         for i in range(len(data)):  # 添加电影数据
             movie_tag = search_movieTags(data[i][0])  # 获取电影id和电影的标签tags
-            tag = str(movie_tag[1][1:-1])
+            tag = str(movie_tag[1])
+            tag = tag[1:-1]
             tag = tag.split(',')
             for j in range(len(tag)):
                 if not tag[j][1:-1] in data.keys():  # tag[j][1:-1]表示第j个标签的具体内容，[1:-1]的目的是去除标签两端的‘’
