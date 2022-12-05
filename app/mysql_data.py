@@ -473,6 +473,26 @@ def search_moviePersons(movie_id):
     return 0
 
 
+# 返回电影的id和标签tags
+def search_movieTags(movie_id):
+    conn = mysql_conn()
+    cursor = conn.cursor()
+    sql = "select movie_id, tags from movie where movie_id=%s" % movie_id
+    try:
+        cursor.execute(sql)
+        if cursor is not None:
+            row = cursor.fetchall()
+            if row is not None:
+                cursor.close()
+                conn.close()
+                return row
+    except Exception as e:
+        print(e)
+    cursor.close()
+    conn.close()
+    return 0
+
+
 # 返回相似电影
 def search_movieSimilar(movie_id):
     conn = mysql_conn()
